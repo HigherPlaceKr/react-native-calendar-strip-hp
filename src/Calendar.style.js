@@ -60,6 +60,8 @@ export default StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center"
   },
+
+  // CALENDAR DOTS
   dot: {
     width: 6,
     height: 6,
@@ -67,8 +69,6 @@ export default StyleSheet.create({
     borderRadius: 5,
     opacity: 0
   },
-
-  // CALENDAR DOTS
   dotsContainer: {
     flexDirection: 'row',
     justifyContent: 'center'

@@ -58,7 +58,7 @@ class CalendarDay extends Component {
     daySelectionAnimation: {
       type: "", // animations disabled by default
       duration: 300,
-      borderWidth: 1,
+      borderWidth: 0,
       borderHighlightColor: "black",
       highlightColor: "yellow",
       animType: LayoutAnimation.Types.easeInEaseOut,
@@ -141,6 +141,7 @@ class CalendarDay extends Component {
 
     if ((prevProps.markedDates !== this.props.markedDates) || hasDateChanged) {
       newState = { ...newState, marking: this.getDateMarking(this.props.date, this.props.markedDates) };
+      //newState.selected = true;
       doStateUpdate = true;
     }
 
@@ -412,6 +413,27 @@ class CalendarDay extends Component {
       _customHighlightDateNameStyle = customStyle.highlightDateNameStyle;
       _customHighlightDateNumberStyle = customStyle.highlightDateNumberStyle;
     }
+    const marking = this.state.marking;
+    if (marking.circles && Array.isArray(marking.circles) && marking.circles.length > 0) {
+      _dateNumberContainerStyle.push({ backgroundColor: daySelectionAnimation.highlightColor });
+      _dateNumberStyle.push(highlightDateNumberStyle);
+      _dateNameStyle.push(highlightDateNameStyle);
+
+      switch (marking.type) {
+        case "start":
+          _dateNumberContainerStyle.push({ borderTopLeftRadius: 18, borderTopRightRadius: 0, borderBottomRightRadius: 0, borderBottomLeftRadius: 18 });
+          break;
+        case "end":
+          _dateNumberContainerStyle.push({ borderTopLeftRadius: 0, borderTopRightRadius: 18, borderBottomRightRadius: 18, borderBottomLeftRadius: 0 });
+          break;
+        case "middle":
+          _dateNumberContainerStyle.push({ borderTopLeftRadius: 0, borderTopRightRadius: 0, borderBottomRightRadius: 0, borderBottomLeftRadius: 0 });
+          break;
+        default:
+          _dateNumberContainerStyle.push({ borderTopLeftRadius: 18, borderTopRightRadius: 18, borderBottomRightRadius: 18, borderBottomLeftRadius: 18 });
+          break;
+      }
+    }
     if (enabled && selected) {
       // Enabled state
       //The user can disable animation, so that is why I use selection type
@@ -485,20 +507,13 @@ class CalendarDay extends Component {
             style={[
               styles.dateContainer,
               responsiveDateContainerStyle,
-              _dateViewStyle,
-              containerStyle
+              containerStyle,
+              {position: 'relative', width: '100%'}
             ]}
           >
-            {showDayName && (
-              <Text
-                style={[{ fontSize: dateNameFontSize }, _dateNameStyle]}
-                allowFontScaling={allowDayTextScaling}
-              >
-                {upperCaseDays ? date.format("ddd").toUpperCase() : date.format("ddd")}
-              </Text>
-            )}
+            {/* {showDayNumber && this.renderMarking()} */}
             {showDayNumber && (
-              <View style={_dateNumberContainerStyle}>
+              <View style={[_dateNumberContainerStyle, {width: '100%'}]}>
                 <Text
                   style={[
                     { fontSize: dateNumberFontSize },
@@ -508,10 +523,18 @@ class CalendarDay extends Component {
                 >
                   {date.date()}
                 </Text>
-
               </View>
             )}
-            { this.renderMarking() }
+            {showDayName && (
+              <Text
+                style={[{ fontSize: dateNameFontSize, marginTop: 3 }, _dateNameStyle]}
+                allowFontScaling={allowDayTextScaling}
+              >
+                {moment().format('YYYY-MM-DD') == moment(date).format('YYYY-MM-DD') ? ('오늘') : (
+                  upperCaseDays ? date.format("ddd").toUpperCase() : date.format("ddd") 
+                )}
+              </Text>
+            )}
           </View>
         </TouchableOpacity>
       );

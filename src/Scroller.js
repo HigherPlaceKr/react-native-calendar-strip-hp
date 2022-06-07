@@ -35,7 +35,6 @@ export default class CalendarScroller extends Component {
 
   constructor(props) {
     super(props);
-
     this.timeoutResetPositionId = null;
 
     this.updateLayout = renderDayParams => {
@@ -128,6 +127,8 @@ export default class CalendarScroller extends Component {
 
   // Scroll to given date, and check against min and max date if available.
   scrollToDate = (date) => {
+    if (!date) return;
+    
     let targetDate = moment(date).subtract(Math.round(this.state.numVisibleItems / 2) - 1, "days");
     const {
       minDate,
@@ -143,7 +144,7 @@ export default class CalendarScroller extends Component {
 
     for (let i = 0; i < this.state.data.length; i++) {
       if (this.state.data[i].date.isSame(targetDate, "day")) {
-        this.rlv?.scrollToIndex(i, true);
+        this.rlv.scrollToIndex(i, true);
         break;
       }
     }
@@ -334,7 +335,7 @@ export default class CalendarScroller extends Component {
 
     return (
       <View
-        style={{ height: this.state.itemHeight, flex: 1 }}
+        style={{ height: 58, flex: 1 }}
         onLayout={this.onLayout}
       >
         <RecyclerListView
