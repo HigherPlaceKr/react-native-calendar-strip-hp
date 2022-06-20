@@ -115,7 +115,7 @@ class CalendarStrip extends Component {
     innerStyle: { flex: 1 },
     maxDayComponentSize: 80,
     minDayComponentSize: 10,
-    shouldAllowFontScaling: true,
+    shouldAllowFontScaling: false,
     markedDates: [],
     useNativeDriver: true,
     scrollToOnSetSelectedDate: true,
@@ -284,7 +284,7 @@ class CalendarStrip extends Component {
 
   // updateWeekView allows external callers to update the visible week.
   updateWeekView = date => {
-    if (this.props.scrollable) {
+    if (this.props.scrollable && this.scroller) {
       this.scroller.scrollToDate(date);
       return;
     }
@@ -325,7 +325,7 @@ class CalendarStrip extends Component {
   setSelectedDate = date => {
     let mDate = moment(date);
     this.onDateSelected(mDate);
-    if (this.props.scrollToOnSetSelectedDate) {
+    if (this.props.scrollToOnSetSelectedDate && this.scroller) {
       // Scroll to selected date, centered in the week
       const scrolledDate = moment(mDate);
       scrolledDate.subtract(Math.floor(this.props.numDaysInWeek / 2), "days");
