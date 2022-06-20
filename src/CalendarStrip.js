@@ -164,7 +164,8 @@ class CalendarStrip extends Component {
     if (!this.compareDates(prevProps.startingDate, this.props.startingDate) ||
         !this.compareDates(prevProps.selectedDate, this.props.selectedDate) ||
         prevProps.datesBlacklist !== this.props.datesBlacklist ||
-        prevProps.datesWhitelist !== this.props.datesWhitelist ||
+        prevProps.datesWhitelist.start !== this.props.datesWhitelist.start ||
+        prevProps.datesWhitelist.end !== this.props.datesWhitelist.end ||
         prevProps.markedDates  !== this.props.markedDates  ||
         prevProps.customDatesStyles !== this.props.customDatesStyles )
     {
